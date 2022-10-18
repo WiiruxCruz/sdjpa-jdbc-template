@@ -1,6 +1,9 @@
 package guru.springframework.jdbc.dao.impl;
 
+import org.springframework.jdbc.core.RowMapper;
+
 import guru.springframework.jdbc.dao.AuthorDao;
+import guru.springframework.jdbc.dao.mapper.AuthorMapper;
 import guru.springframework.jdbc.domain.Author;
 
 public class AuthorDaoImpl implements AuthorDao {
@@ -33,6 +36,10 @@ public class AuthorDaoImpl implements AuthorDao {
 	public Author deleteAuthorById(Long id) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	private RowMapper<Author> getRowMapper(){
+		return new AuthorMapper();
 	}
 
 }
