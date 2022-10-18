@@ -1,6 +1,7 @@
 package guru.springframework.jdbc;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.test.context.ActiveProfiles;
 
 import guru.springframework.jdbc.dao.AuthorDao;
@@ -33,9 +35,16 @@ public class AuthorDaoIntegrationTest {
 		Author saved = ad.saveNewAuthor(author);
 		
 		ad.deleteAuthorById(saved.getId());
-		Author deleted = ad.getById(saved.getId());
 		
-		assertThat(deleted).isNull();
+		assertThrows(EmptyResultDataAccessException.class,
+			() -> {
+				ad.getById(saved.getId());
+			}
+		);
+		
+		//Author deleted = ad.getById(saved.getId());
+		
+		//assertThat(deleted).isNull();
 	}
 	
 	@Test

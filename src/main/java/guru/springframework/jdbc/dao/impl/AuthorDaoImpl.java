@@ -62,9 +62,12 @@ public class AuthorDaoImpl implements AuthorDao {
 	}
 
 	@Override
-	public Author deleteAuthorById(Long id) {
+	public void deleteAuthorById(Long id) {
 		// TODO Auto-generated method stub
-		return null;
+		jdbcTemplate.update(
+			"DELETE FROM author where id = ?",
+			id
+		);
 	}
 	
 	private RowMapper<Author> getRowMapper(){
