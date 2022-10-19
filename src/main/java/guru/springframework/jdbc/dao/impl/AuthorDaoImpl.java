@@ -5,6 +5,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
 import guru.springframework.jdbc.dao.AuthorDao;
+import guru.springframework.jdbc.dao.extractor.AuthorExtractor;
 import guru.springframework.jdbc.dao.mapper.AuthorMapper;
 import guru.springframework.jdbc.domain.Author;
 
@@ -20,7 +21,20 @@ public class AuthorDaoImpl implements AuthorDao {
 	@Override
 	public Author getById(Long id) {
 		// TODO Auto-generated method stub
-		return jdbcTemplate.queryForObject("SELECT * FROM author where id = ?", getRowMapper(), id);
+		String sql = 
+		"select\r\n"
+		+ "	author.id as id, first_name, last_name,\r\n"
+		+ "    book.id as book_id, book.isbn, book.publisher,\r\n"
+		+ "    book.title\r\n"
+		+ "from author\r\n"
+		+ "left outer join book on author.id = book.author_id\r\n"
+		+ "where\r\n"
+		+ "author.id = ?\r\n"
+		;
+		
+		//return jdbcTemplate.queryForObject("SELECT * FROM author where id = ?", getRowMapper(), id);
+		
+		return jdbcTemplate.query(sql, new AuthorExtractor(), id);
 	}
 
 	@Override

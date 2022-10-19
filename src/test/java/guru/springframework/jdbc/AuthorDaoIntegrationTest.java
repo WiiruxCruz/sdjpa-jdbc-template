@@ -10,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.dao.TransientDataAccessException;
 import org.springframework.test.context.ActiveProfiles;
 
 import guru.springframework.jdbc.dao.AuthorDao;
@@ -36,7 +37,14 @@ public class AuthorDaoIntegrationTest {
 		
 		ad.deleteAuthorById(saved.getId());
 		
+		/*
 		assertThrows(EmptyResultDataAccessException.class,
+			() -> {
+				ad.getById(saved.getId());
+			}
+		);
+		*/
+		assertThrows(TransientDataAccessException.class,
 			() -> {
 				ad.getById(saved.getId());
 			}
